@@ -1,0 +1,40 @@
+import numpy as np
+import cv2
+
+def draw_line(img, x0, y0, x1, y1, color=(255, 255, 255)):
+    dx = x1 - x0
+    dy = y1 - y0
+    x = x0
+    y = y0
+    p = 2 * dy - dx
+
+    while x <= x1:
+        img[y, x] = color  # Set the pixel color
+        if p >= 0:
+            y += 1
+            p += 2 * dy - 2 * dx
+        else:
+            p += 2 * dy
+        x += 1
+
+def main():
+    # Create a black image
+    height, width = 500, 500
+    img = np.zeros((height, width, 3), dtype=np.uint8)
+
+    # Input coordinates
+    x0 = int(input("Enter x-coordinate of first point: "))
+    y0 = int(input("Enter y-coordinate of first point: "))
+    x1 = int(input("Enter x-coordinate of second point: "))
+    y1 = int(input("Enter y-coordinate of second point: "))
+
+    # Draw the line
+    draw_line(img, x0, y0, x1, y1)
+
+    # Display the image
+    cv2.imshow("Line Drawing", img)
+    cv2.waitKey(0)  # Wait for a key press
+    cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()
