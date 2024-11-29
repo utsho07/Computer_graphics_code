@@ -1,0 +1,61 @@
+import matplotlib
+matplotlib.use('Agg')  # Use a backend that doesn't require Tcl/Tk
+import matplotlib.pyplot as plt
+
+def plot_circle(xc, yc, x, y, points):
+    """Helper function to calculate points in all octants."""
+    points.extend([
+        (xc + x, yc + y), (xc - x, yc + y),
+        (xc + x, yc - y), (xc - x, yc - y),
+        (xc + y, yc + x), (xc - y, yc + x),
+        (xc + y, yc - x), (xc - y, yc - x),
+    ])
+
+def bresenham_circle(xc, yc, r):
+    """Bresenham's Circle Drawing Algorithm."""
+    x, y = 0, r
+    d = 3 - 2 * r  # Initial decision parameter
+    points = []
+
+    plot_circle(xc, yc, x, y, points)
+
+    while y >= x:
+        x += 1
+        if d > 0:
+            y -= 1
+            d = d + 4 * (x - y) + 10
+        else:
+            d = d + 4 * x + 6
+        plot_circle(xc, yc, x, y, points)
+
+    return points
+
+def visualize_circle(points):
+    """Visualize the circle using matplotlib without labels."""
+    x_coords, y_coords = zip(*points)
+    plt.figure(figsize=(8, 8))
+    plt.scatter(x_coords, y_coords, s=10, color='blue')  # Plot points without labels
+
+    # Plot settings
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.title("Bresenham's Circle")
+    plt.xlabel("X-axis")
+    plt.ylabel("Y-axis")
+    plt.savefig("test_plot1.png")  # Save the plot before showing
+    print("Plot saved as 'test_plot1.png'")
+
+if __name__ == "__main__":
+    # Circle center and radius
+    xc, yc, r = 40, 40, 20
+
+    # Get points for the circle
+    circle_points = bresenham_circle(xc, yc, r)
+
+    # Print points
+    print("Circle Points:")
+    for point in circle_points:
+        print(point)
+
+    # Visualize the circle 
+    visualize_circle(circle_points)
