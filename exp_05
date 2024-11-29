@@ -1,0 +1,40 @@
+import numpy as np
+import cv2
+
+def dda_line(x1, y1, x2, y2):
+    #create a black image 
+    image = np.zeros((500, 500,3), dtype=np.uint8)
+
+    #calculate the  difference between x and y values
+    dx = (x2 - x1)
+    dy = (y2 - y1)
+
+    #calculate the number of steps to take
+    steps = max(abs(dx),abs(dy))
+    #calculate how much to increment x and y value at each step
+
+    x_increment = dx / steps
+    y_increment = dy / steps
+
+    #initialize x and y to the starting point
+    x = x1
+    y = y1
+
+    #for each step, set the pixel color and move to the next pixel
+    for i in range(steps+1):
+        image[int(round(y)), int(round(x))] = (255, 255, 0)  # Set the pixel color to red
+        x += x_increment
+        y += y_increment
+
+    return image
+
+#get the image
+x1,y1= 50,350
+x2,y2= 450,50
+image = dda_line(x1, y1, x2,y2)
+
+        #show the image
+cv2.imshow("DDA Line Drawing", image)
+cv2.waitKey(0)  # Wait for 1 millisecond to display the image
+cv2.destroyAllWindows()
+
