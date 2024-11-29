@@ -1,0 +1,54 @@
+import numpy as np
+import cv2 
+
+def minpoint_line(x1, y1, x2, y2):
+    image = np.zeros((500,500,3), dtype=np.uint8)
+
+    dx= x2-x1
+    dy= y2-y1
+
+    #ensure that we handle the negative solve correctly
+    sx = 1 if dx>0 else -1
+    sy = 1 if dy>0 else -1
+    dx, dy = abs(dx), abs(dy)
+
+    #initialize decision variable and increments
+    if dx>=dy:
+        D= 2*dy -dx
+        delta_D1= 2*dy
+        delta_D2= 2*(dy-dx)
+        x,y = x1,y1
+        while x!=x2:
+            image[x,y] =(255,255,255)
+            if D <0:
+                D += delta_D1
+            else:
+                D += delta_D2
+                y += sy
+            x +=sx
+    else:
+        D = 2*dx- dy
+        delta_D1 = 2*dx
+        delta_D2 = 2*(dx-dy)
+        x,y = x1,y1
+        while y!=y2:
+            image[x,y] =(255,255,255)
+            if D < 0:
+                D += delta_D1
+            else:
+                D += delta_D2
+                x += sx
+            y += sy
+    #mark the final point
+    image[y,x] =(255,255,255)
+    return image
+
+x1,y1= 50,350
+
+x2,y2= 450,50
+image = minpoint_line(x1,y1,x2,y2)
+
+cv2.imshow('Line',image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+            
